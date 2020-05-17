@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tarea;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class TareasController extends Controller
 {
@@ -34,7 +36,30 @@ class TareasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+         //validar los datos (intente hacer la validacion en una clase aparte pero tuve algunos errors)
+         $validatedData = $request->validate([
+             'nombre' => 'required|string|max:255|min:3',
+             'descripcion' => 'required|string|max:10000|min:10',
+             'fecha_vencimiento' => 'required|date',
+         ]);
+ 
+         //crear nueva tarea
+         $tarea = new Tarea;
+         
+         //asignar los datos de la peticion a la nueva tarea
+         $tarea->nombre = $request->nombre;
+         $tarea->descripcion = $request->descripcion;
+         $tarea->estado_id = 1;
+         $tarea->fecha_vencimiento = $request->fecha_vencimiento;
+ 
+         //guardar la tarea
+         $tarea->save();
+ 
+         //mensaje de sesion exitoso
+         Session::flash('success', 'La tarea se creo exitosamente.');
+ 
+         //retornar a index view
+         return redirect()->route('tareas.create');
     }
 
     /**
