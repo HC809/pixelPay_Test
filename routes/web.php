@@ -13,6 +13,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::resource('estados', 'EstadosController');
+
+Route::get('/', function (){
+    return redirect()->route('estados.index');
 });
+
+// Route::resource('tareas', 'TareasController');
+
+// Route::get('/', function (){
+//     return redirect()->route('tareas.index');
+// });
