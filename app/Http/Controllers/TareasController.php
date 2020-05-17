@@ -23,7 +23,7 @@ class TareasController extends Controller
      */
     public function create()
     {
-        //
+        return view('tareas.create');
     }
 
     /**
