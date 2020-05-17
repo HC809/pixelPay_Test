@@ -2,10 +2,21 @@
 
 namespace App\Models;
 
+use App\Traits\TimestampsTrait;
+use App\Traits\TareasTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Tarea extends Model
 {
-     //definicion de la tabla 'Estados'
-     protected $table = 'tareas';
+
+    use TimestampsTrait;
+    use TareasTrait;
+
+    public function getDates() {
+		return ['created_at', 'updated_at', 'fecha_vencimiento'];
+	}
+
+    //Definición de la tabla 'Tareas'
+    protected $table = 'tareas';
+    
 }
