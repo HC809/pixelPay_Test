@@ -138,6 +138,14 @@ class TareasController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $tarea = Tarea::find($id);
+
+        $tarea->delete();
+
+          //mensaje de sesion exitoso
+          Session::flash('success', 'La tarea se elimino exitosamente.');
+
+           //retornar a index view
+          return redirect()->route('tareas.index');
     }
 }
