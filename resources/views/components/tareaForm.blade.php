@@ -10,12 +10,12 @@
 <div class="row justify-content-center mt-3">
     <div class="col-sm-4">
         <a href="{{ route('tareas.index') }}" class="btn btn-secondary btn-block">
-            <ion-icon name="arrow-back-circle-outline"></ion-icon> Regresar
+            Regresar
         </a>
     </div>
     <div class="col-sm-4">
         <button class="btn btn-primary btn-block" type="submit">
-            <ion-icon name="save-outline"></ion-icon> Guardar
+            Guardar
         </button>
     </div>
 </div>

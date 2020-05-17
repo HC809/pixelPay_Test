@@ -15,7 +15,9 @@ class TareasController extends Controller
      */
     public function index()
     {
-        //
+        $tareas = Tarea::orderBy('fecha_vencimiento', 'asc')->paginate(3);
+
+        return view('tareas.index')->with('tareas', $tareas);
     }
 
     /**
