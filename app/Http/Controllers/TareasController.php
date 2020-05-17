@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tarea;
+use App\Models\Estado;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -15,7 +16,7 @@ class TareasController extends Controller
      */
     public function index()
     {
-        $tareas = Tarea::orderBy('fecha_vencimiento', 'asc')->paginate(3);
+        $tareas = Tarea::orderBy('id', 'asc')->paginate(3);
 
         return view('tareas.index')->with('tareas', $tareas);
     }
@@ -27,7 +28,9 @@ class TareasController extends Controller
      */
     public function create()
     {
-        return view('tareas.create');
+        $estados = Estado::pluck('nombre', 'id');
+
+        return view('tareas.create', compact('estados'));
     }
 
     /**
@@ -51,7 +54,7 @@ class TareasController extends Controller
          //asignar los datos de la peticion a la nueva tarea
          $tarea->nombre = $request->nombre;
          $tarea->descripcion = $request->descripcion;
-         $tarea->estado_id = 1;
+         $tarea->estado_id = $request->estado_id;
          $tarea->fecha_vencimiento = $request->fecha_vencimiento;
  
          //guardar la tarea
@@ -61,7 +64,7 @@ class TareasController extends Controller
          Session::flash('success', 'La tarea se creo exitosamente.');
  
          //retornar a index view
-         return redirect()->route('tareas.create');
+         return redirect()->route('tareas.index');
     }
 
     /**
@@ -83,7 +86,12 @@ class TareasController extends Controller
      */
     public function edit($id)
     {
-        //
+        $estados = Estado::pluck('nombre', 'id');
+
+        $tarea = Tarea::find($id);
+        $tarea->fechaVencimientoFormato = false;
+
+        return view('tareas.edit', compact('id', 'estados'))->with('tarea', $tarea);;
     }
 
     /**
@@ -95,7 +103,31 @@ class TareasController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+                //validar los datos
+                $validatedData = $request->validate([
+                    'nombre' => 'required|string|max:255|min:3',
+                    'descripcion' => 'required|string|max:10000|min:10',
+                    'estado_id' => 'required',
+                    'fecha_vencimiento' => 'required|date',
+                ]);
+        
+                //buscar la tarea
+                $tarea = Tarea::find($id);
+                
+                //asignar los datos de la peticion a la tarea
+                $tarea->nombre = $request->nombre;
+                $tarea->descripcion = $request->descripcion;
+                $tarea->fecha_vencimiento = $request->fecha_vencimiento;
+                $tarea->estado_id = $request->estado_id;
+        
+                //guardar la tarea
+                $tarea->save();
+        
+                //mensaje de sesion exitoso
+                Session::flash('success', 'La tarea se guardo exitosamente.');
+        
+                //retornar a index view
+                return redirect()->route('tareas.index');
     }
 
     /**

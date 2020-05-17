@@ -11,6 +11,8 @@
             </div>
             <div class="card-body">
                 {!! Form::open(['route' => 'tareas.store', 'method' => 'POST']) !!}
+                {!! Form::Label('estado_id', 'Estado:') !!}
+                {!! Form::select('estado_id', $estados, null, ['class' => 'form-control']) !!}
                 @component('components.tareaForm')
                 @endcomponent
                 {!! Form::close() !!}
